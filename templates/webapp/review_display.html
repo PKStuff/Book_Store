@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block title %}
+Review Page
+{% endblock %}
+{% block nav %}
+{% if user %}
+<li class="nav-item active">
+  <a class="nav-link" href="{% url 'index' %}">{{user}}
+    <span class="sr-only">(current)</span>
+  </a>
+</li>
+{% endif %}
+{% endblock%}
+{% block content %}
+        <div class="row">
+         {% for data in book %}
+          <div class="col-lg-3 col-md-6 mb-4" >
+            <div class="card h-100" style="box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.4)">
+                <img class="card-img-top" src="{{data.front_page.url}}" alt="" width="100px" height="300px">
+                <div class="card-body">
+                    <h4 class="card-title">{{data.book_name}} by {{data.author}}</h4>
+                    <p class="card-text">Price: Rs.{{data.price}}</p>
+                    <p class="card-text"> Publication: {{data.publication}}</p>
+                </div>
+                {% if user %}
+                    <a href="{{data.file.url}}" class="btn btn-danger" >
+                        <div class="card-footer">
+                        Download
+                        </div>
+                    </a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-danger" >
+                        <div class="card-footer">
+                        Download
+                        </div>
+                    </a>
+                {% endif %}
+            </div>
+          </div>
+         {% endfor %}
+            {% for review in reviews %}
+                <div class="col-lg-10 col-md-6 mb-4" >
+                    <div class="card h-1" style="box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.4)">
+                        <div class="card-body">
+                            <h4 class="card-title">{{review.user}}</h4>
+                            {% if review.rating == 1 %}
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star" style="color:#E0E0E0"></span>
+                            <span class="fa fa-star" style="color:#E0E0E0"></span>
+                            <span class="fa fa-star" style="color:#E0E0E0"></span>
+                            <span class="fa fa-star" style="color:#E0E0E0"></span>
+                            {% elif review.rating == 2 %}
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star" style="color:#E0E0E0"></span>
+                            <span class="fa fa-star" style="color:#E0E0E0"></span>
+                            <span class="fa fa-star" style="color:#E0E0E0"></span>
+                            {% elif review.rating == 3 %}
+                            <span class="fa fa-star checked" style="color:green"></span>
+                            <span class="fa fa-star checked" style="color:green"></span>
+                            <span class="fa fa-star checked" style="color:green"></span>
+                            <span class="fa fa-star" style="color:#E0E0E0"></span>
+                            <span class="fa fa-star" style="color:#E0E0E0"></span>
+                            {% elif review.rating == 4 %}
+                            <span class="fa fa-star checked" style="color:green"></span>
+                            <span class="fa fa-star checked" style="color:green"></span>
+                            <span class="fa fa-star checked" style="color:green"></span>
+                            <span class="fa fa-star checked" style="color:green"></span>
+                            <span class="fa fa-star" style="color:#E0E0E0"></span>
+                            {% else %}
+                            <span class="fa fa-star checked" style="color:green"></span>
+                            <span class="fa fa-star checked" style="color:green"></span>
+                            <span class="fa fa-star checked" style="color:green"></span>
+                            <span class="fa fa-star checked" style="color:green"></span>
+                            <span class="fa fa-star checked" style="color:green"></span>
+                            {% endif %}
+                            <p class="card-text"> {{review.review}}</p>
+                        </div>
+                    </div>
+                  </div>
+                {% endfor %}
+            </div>
+            <a href="{% url 'write_review' book_id %}" class="btn btn-info" >Write Your own Review.</a></br></br></br></br></br></br></br></br></br></br></br></br>
+    <!-- /.row -->
+
+{% endblock %}
