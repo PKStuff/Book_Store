@@ -3,6 +3,10 @@
 Index Page
 {% endblock %}
 {% block nav %}
+<form class="form-inline my-2 my-lg-0" method="GET" id="searchform">
+  <input class="form-control mr-sm-2" type="search" id="searchbox" name="q" value="{{request.GET.q}}" placeholder="Search" aria-label="Search">
+  <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+</form>
 {% if user %}
 <li class="nav-item active">
   <a class="nav-link" href="{% url 'index' %}">{{user}}
@@ -12,6 +16,7 @@ Index Page
 {% endif %}
 {% endblock%}
 {% block navbar %}
+
 <div class="sidebar">
   <a class="active" href="{% url 'index' %}">Home</a>
   {% for name in names %}
@@ -22,6 +27,7 @@ Index Page
 {% block content %}
 
     <!-- Page Features -->
+    {% if form %}
     <div class="row text-center">
       {% for data in form %}
       <div class="col-lg-3 col-md-6 mb-4" >
@@ -45,6 +51,9 @@ Index Page
       </div>
       {% endfor %}
     </div>
+    {% else %}
+    <h2 style="color:RED">Books not found</h2>
+    {% endif %}
     <!-- /.row -->
 
 {% endblock %}

@@ -9,22 +9,30 @@ from django.core.mail import EmailMessage
 
 user = None
 def display(request):
+
+    if request.method == 'GET':
+        searched = request.GET.get('q')
+
     try:
         global user
         user = User.objects.get(username=request.user.username)
     except User.DoesNotExist:
         user = None
-    form1 = Books.objects.all()
-    most_rated_books = []
-    for char in form1:
-        total = Review.objects.filter(Book=char.id).count()
-        review_sum = sum(Review.objects.filter(Book=char.id).values_list('rating',flat=True))
-        if review_sum > 0 and (review_sum/total) > 1:
-            most_rated_books.append(char.id)
+    if searched == None:
+        form1 = Books.objects.all()
+        most_rated_books = []
+        for char in form1:
+            total = Review.objects.filter(Book=char.id).count()
+            review_sum = sum(Review.objects.filter(Book=char.id).values_list('rating',flat=True))
+            if review_sum > 0 and (review_sum/total) > 1:
+                most_rated_books.append(char.id)
 
-    form = Books.objects.filter(pk__in=most_rated_books)
+        form = Books.objects.filter(pk__in=most_rated_books)
+    else:
+        form = Books.objects.filter(book_name__icontains=searched)
+
     names = set(Books.objects.all().values_list('related_to',flat=True))
-    return render(request,'webapp/index.html',{'form':form,'user':user,'names':names,'most_rated_books':most_rated_books})
+    return render(request,'webapp/index.html',{'form':form,'user':user,'names':names,})
 
 def display_review(request,book_id):
     try:
